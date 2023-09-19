@@ -6,7 +6,7 @@ import jwt from 'jsonwebtoken';
 
 export default {
 	/**
-	 *  @method post('signin') 
+	 *  @method post('signin')
 	 * */
 	signin: AsyncFn(async (req, res) => {
 		const user = await userService.signin(req.body);
@@ -22,7 +22,7 @@ export default {
 	 * */
 	createUser: AsyncFn(async (req, res) => {
 		const newUser = await userService.createUser(req.body);
-		const response = new HttpResponse(newUser, 'Created new user')
+		const response = new HttpResponse(newUser, 'Created new user');
 		return res.status(HttpStatusCode.CREATED).json(response);
 	}),
 
@@ -30,9 +30,9 @@ export default {
 	 *  @method get('/users')
 	 * */
 	getUsers: AsyncFn(async (req, res) => {
-		const limit = req.query.limit??=10
+		const limit = (req.query.limit ??= 10);
 		const users = await userService.getAllUsers(limit);
-		const response = new HttpResponse(users, 'Ok')
+		const response = new HttpResponse(users, 'Ok');
 		return res.status(HttpStatusCode.OK).json(response);
 	})
 };
