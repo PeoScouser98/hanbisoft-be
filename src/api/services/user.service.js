@@ -7,11 +7,10 @@ export default {
 	 * @param {{email: string, password: string}} payload
 	 */
 	signin: async (payload) => {
-		console.log(payload)
 		const user = await UserModel.findOne({ email: payload.email });
 		if (!user) throw createHttpError.BadRequest('User not found');
 		if (!user.authenticate(payload.password)) throw createHttpError.BadRequest('Incorrect password');
-		user.password = undefined
+		user.password = undefined;
 		return user;
 	},
 	/**
