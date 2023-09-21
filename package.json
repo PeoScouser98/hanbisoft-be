@@ -6,8 +6,7 @@
 	"scripts": {
 		"dev": "npx nodemon",
 		"start": "SET NODE_ENV=production && node dist/app.js",
-		"cleanup": "rm -rf dist",
-		"build": "npm run cleanup && npx webpack --config webpack.config.js",
+		"build": "rm -rf dist && npx webpack --config webpack.config.js",
 		"prettier:fix": "prettier --write \"src/**/(*.js)\"",
 		"eslint:fix": "eslint . --fix"
 	},

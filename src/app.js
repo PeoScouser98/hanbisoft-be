@@ -5,6 +5,7 @@ import morgan from 'morgan';
 import rootRouter from './api/routers';
 import _configs from './configs/app.config';
 import './database/mongo.db';
+import HttpStatusCode from './constants/httpStatus';
 
 const app = express();
 
@@ -26,6 +27,13 @@ app.use(
 );
 
 app.use('/api', rootRouter);
+
+app.get('/', (_, res) =>
+	res.status(HttpStatusCode.OK).json({
+		message: 'Server now is running',
+		status: 200
+	})
+);
 
 app.listen(_configs.PORT, () => {
 	console.log(`[SUCCESS]: Server is listening on: http://localhost:${_configs.PORT}`);

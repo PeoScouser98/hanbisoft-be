@@ -4,6 +4,21 @@ import _configs from '../../configs/app.config';
 import { UserRoleEnum } from '../../constants/enum';
 import generatePictureByName from '../../helpers/generatePicture';
 
+/**
+ * @exports @typedef User
+ * @readonly @property {mongoose.Types.ObjectId | string} _id
+ * @property {string} email
+ * @private @property {string} password
+ * @property {string} displayName
+ * @property {Date} dateOfBirth
+ * @property {string} address
+ * @property {string} picture
+ * @property {number} role
+ */
+
+/**
+ * @type {User & {authenticate: (string) => boolean}}
+ */
 const UserSchema = new mongoose.Schema(
 	{
 		email: {
@@ -48,17 +63,17 @@ const UserSchema = new mongoose.Schema(
 
 UserSchema.pre('save', function (next) {
 	this.password = bcrypt.hashSync(this.password, bcrypt.genSaltSync(_configs.SALT_ROUND));
-	this.picture = generatePictureByName(this.displayName)
+	this.picture = generatePictureByName(this.displayName);
 	next();
 });
 
 /**
- * @description Compare password to authenticate
+ * Compare password to authenticate
  * @param {string} password
  */
 UserSchema.methods.authenticate = function (password) {
-	const result =  bcrypt.compareSync(password, this.password);
-	return result
+	const result = bcrypt.compareSync(password, this.password);
+	return result;
 };
 
 UserSchema.plugin(require('mongoose-paginate-v2'));

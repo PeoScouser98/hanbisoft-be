@@ -9,7 +9,7 @@ import UserModel from '../models/user.model';
 export default {
 	/**
 	 * @endpoint /signin
-	 * @method Post()
+	 * @method POST
 	 * */
 	signin: AsyncFn(async (req, res) => {
 		const user = await userService.signin(req.body);
@@ -22,7 +22,7 @@ export default {
 
 	/**
 	 * @endpoint /create-user
-	 * @method Post()
+	 * @method POST
 	 * */
 	createUser: AsyncFn(async (req, res) => {
 		const newUser = await userService.createUser(req.body);
@@ -31,7 +31,7 @@ export default {
 	}),
 	/**
 	 * @endpoint /users/info
-	 * @method Get()
+	 * @method GET
 	 */
 	getUserInfo: AsyncFn(async (req, res) => {
 		const currentUser = await UserModel.findById(req.auth);
@@ -40,7 +40,7 @@ export default {
 	}),
 	/**
 	 * @endpoint /users
-	 * @method Get()
+	 * @method GET
 	 * */
 	getUsers: AsyncFn(async (req, res) => {
 		const limit = (req.query.limit ??= 10);
@@ -50,7 +50,7 @@ export default {
 	}),
 	/**
 	 * @endpoint /refresh-token
-	 * @method Get()
+	 * @method GET
 	 */
 	refreshToken: AsyncFn(async (req, res) => {
 		const id = req.params.authId;
@@ -62,5 +62,15 @@ export default {
 		});
 		const response = new HttpResponse(refreshToken, 'Get refresh token successfully');
 		return res.status(HttpStatusCode.OK).json(response);
+	}),
+	/**
+	 * @endpoint /user/update
+	 * @method PATCH
+	 */
+	updateUser: AsyncFn(async (req, res) => {
+		const authId = req.auth;
+		const updatedUser = await userService.updateUser(authId, req.body);
+		const response = new HttpResponse(updatedUser, `Updated user's info`);
+		return res.status(HttpStatusCode.CREATED).json(response);
 	})
 };

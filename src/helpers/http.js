@@ -1,6 +1,6 @@
 import { isHttpError } from 'http-errors';
-import HttpStatusCode from '../constants/httpStatus';
 import { JsonWebTokenError } from 'jsonwebtoken';
+import HttpStatusCode from '../constants/httpStatus';
 
 class HttpException extends Error {
 	message;
@@ -30,8 +30,16 @@ class HttpResponse {
 }
 
 /**
- * @param {(req: import("express").Request, res:import("express").Response, next: import('express').NextFunction) =>  Promise<any>} fn
- * @return {(req: import("express").Request, res:import("express").Response, next: import('express').NextFunction)}
+ * @typedef {import("express").Request} Request
+ * @typedef {import("express").Response} Response
+ * @typedef {import("express").NextFunction} NextFunction
+ * @typedef {(req: Request, res:Response, next: NextFunction) => Promise<e.Response<any, Record<string, any>>>} AsyncFunction
+ */
+
+/**
+ * @function
+ * @param {AsyncFunction} fn
+ * @return {(req: Request, res:Response, next: NextFunction) => Promise<e.Response<any, Record<string, any>>>}
  */
 const AsyncFn = (fn) => (req, res, next) =>
 	Promise.resolve(fn(req, res, next)).catch((error) => {

@@ -8,5 +8,6 @@ router.post('/signin', userController.signin);
 router.post('/create-user', authMiddleware.checkAuthenticated, authMiddleware.checkIsAdmin, userController.createUser);
 router.get('/users', authMiddleware.checkAuthenticated, authMiddleware.checkIsAdmin, userController.getUsers);
 router.get('/refresh-token/:authId', userController.refreshToken);
+router.patch('/user/update', authMiddleware.checkAuthenticated, userController.updateUser);
 
 export default router;
