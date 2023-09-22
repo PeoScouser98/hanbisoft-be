@@ -17,7 +17,7 @@ import generatePictureByName from '../../helpers/generatePicture';
  */
 
 /**
- * @type {User & {authenticate: (string) => boolean}}
+ * @type {mongoose.Schema<User> & {authenticate: (string) => boolean}}
  */
 const UserSchema = new mongoose.Schema(
 	{

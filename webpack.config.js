@@ -8,6 +8,9 @@ module.exports = {
 		filename: 'app.js',
 		path: path.resolve(__dirname, 'dist')
 	},
+	node: {
+		__dirname: true
+	},
 	mode: 'production',
 	target: 'node',
 	module: {

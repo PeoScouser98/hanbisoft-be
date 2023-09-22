@@ -5,7 +5,7 @@ const _configs = {
 	PORT: process.env.PORT,
 	SALT_ROUND: +process.env.SALT_ROUND,
 	NODE_ENV: process.env.NODE_ENV,
-	JWT_EXPIRES: 60 * 15,
+	JWT_EXPIRES: 15,
 	JWT_SECRET: process.env.JWT_SECRET
 };
 
