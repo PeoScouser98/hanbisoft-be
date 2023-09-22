@@ -16,9 +16,14 @@ export default {
 		return res.status(HttpStatusCode.OK).json(response);
 	}),
 	/**
-	 * @endpoint /equipments/search
-	 * @method POST
+	 * @endpoint /equipments/lookup-values
+	 * @method GET
 	 */
+	getLookupValues: AsyncFn(async (req, res) => {
+		const lookupFieldValues = await equipmentService.getLookupValues();
+		const response = new HttpResponse(lookupFieldValues, 'Ok');
+		return res.status(HttpStatusCode.OK).json(response);
+	}),
 	search: AsyncFn(async (req, res) => {
 		const searchResult = await equipmentService.search(req.body);
 		const response = new HttpResponse(searchResult, 'Ok');

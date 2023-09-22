@@ -14,7 +14,22 @@ export default {
 		return await EquipmentModel.find().limit(limit).skip(skip).sort({ item_cd: 1 });
 	},
 	getLookupValues: async () => {
-		// const []
+		const [saleCodes, saleStatus, prodType, proType1, prodType2, prodType3] = await Promise.all([
+			EquipmentModel.find().distinct('sale_cd'),
+			EquipmentModel.find().distinct('sale_status'),
+			EquipmentModel.find().distinct('prod_type'),
+			EquipmentModel.find().distinct('prod_type1'),
+			EquipmentModel.find().distinct('prod_type2'),
+			EquipmentModel.find().distinct('prod_type3')
+		]);
+		return {
+			saleCodes: !!saleCodes.length ? saleCodes.map((item) => ({ text: item, value: item })) : [],
+			saleStatus: !!saleStatus.length ? saleStatus.map((item) => ({ text: item, value: item })) : [],
+			prodType: !!prodType.length ? prodType.map((item) => ({ text: item, value: item })) : [],
+			proType1: !!proType1.length ? proType1.map((item) => ({ text: item, value: item })) : [],
+			prodType2: !!prodType2.length ? prodType2.map((item) => ({ text: item, value: item })) : [],
+			prodType3: !!prodType3.length ? prodType3.map((item) => ({ text: item, value: item })) : []
+		};
 	},
 	/**
 	 * @param {{[key: string]: string|number|boolean}} searchTermsObj
