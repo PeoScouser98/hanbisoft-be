@@ -1,12 +1,21 @@
 import 'dotenv/config';
 
+const { env } = process;
+
 const _configs = {
-	MONGO_URI: process.env.MONGO_URI,
-	PORT: process.env.PORT,
-	SALT_ROUND: +process.env.SALT_ROUND,
-	NODE_ENV: process.env.NODE_ENV,
-	JWT_EXPIRES: 15,
-	JWT_SECRET: process.env.JWT_SECRET
+	MONGO_URI: env.MONGO_URI,
+	PORT: env.PORT,
+	SALT_ROUND: +env.SALT_ROUND,
+	NODE_ENV: env.NODE_ENV,
+	JWT_EXPIRES: env.JWT_EXPIRES,
+	JWT_SECRET: env.JWT_SECRET,
+	MAILER_AUTH: env.MAILER_AUTH,
+	MAILER_PASSWORD: env.MAILER_PASSWORD,
+	MAILER_PORT: env.PORT,
+	OAUTH2_CLIENT_ID: env.OAUTH2_CLIENT_ID,
+	OAUTH2_CLIENT_SECRET: env.OAUTH2_CLIENT_SECRET,
+	OAUTH2_REFRESH_TOKEN: env.OAUTH2_REFRESH_TOKEN,
+	OAUTH2_REDIRECT_URI: env.OAUTH2_REDIRECT_URI
 };
 
 export default _configs;

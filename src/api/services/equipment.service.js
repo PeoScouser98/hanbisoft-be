@@ -1,53 +1,65 @@
-import mongoose from 'mongoose';
+import mongoose, { FilterQuery } from 'mongoose';
 import { ActionEnum } from '../../constants/enum';
 import EquipmentModel from '../models/equipment.model';
 import crypto from 'crypto';
 /**
  * @typedef {import('../models/equipment.model').Equipment} Equipment
+ * @typedef {import('mongoose').FilterQuery} FilterQuery
  */
 
-/**
- * @mixin
- */
 export default {
-	getAll: async ({ limit = 50, skip = 0 }) => {
-		return await EquipmentModel.find().limit(limit).skip(skip).sort({ item_cd: 1 });
+	getAll: async ({ page, filter }) => {
+		/**@type {FilterQuery} */
+		const filterQuery = {};
+
+		for (const key in filter) {
+			if (filter[key]) filterQuery[key] = new RegExp(`^${filter[key]}`, 'gi');
+		}
+		return await EquipmentModel.paginate(filterQuery, {
+			sort: {
+				item_cd: 1
+			},
+			limit: 30,
+			page: page
+		});
+		// .limit(paginate.limit).skip(paginate.skip).sort({ item_cd: 1 });
 	},
 	getLookupValues: async () => {
-		const [saleCodes, saleStatus, prodType, proType1, prodType2, prodType3] = await Promise.all([
-			EquipmentModel.find().distinct('sale_cd'),
-			EquipmentModel.find().distinct('sale_status'),
-			EquipmentModel.find().distinct('prod_type'),
-			EquipmentModel.find().distinct('prod_type1'),
-			EquipmentModel.find().distinct('prod_type2'),
-			EquipmentModel.find().distinct('prod_type3')
+		const [sale_cd, sale_status, prod_type, prod_type1, prod_type2, prod_type3] = await Promise.all([
+			EquipmentModel.find()
+				.distinct('sale_cd')
+				.transform((docs) => docs.map((item) => ({ text: item, value: item }))),
+			EquipmentModel.find()
+				.distinct('sale_status')
+				.transform((docs) => docs.map((item) => ({ text: item, value: item }))),
+			EquipmentModel.find()
+				.distinct('prod_type')
+				.transform((docs) => docs.map((item) => ({ text: item, value: item }))),
+			EquipmentModel.find()
+				.distinct('prod_type1')
+				.transform((docs) => docs.map((item) => ({ text: item, value: item }))),
+			EquipmentModel.find()
+				.distinct('prod_type2')
+				.transform((docs) => docs.map((item) => ({ text: item, value: item }))),
+			EquipmentModel.find()
+				.distinct('prod_type3')
+				.transform((docs) => docs.map((item) => ({ text: item, value: item })))
 		]);
 		return {
-			saleCodes: !!saleCodes.length ? saleCodes.map((item) => ({ text: item, value: item })) : [],
-			saleStatus: !!saleStatus.length ? saleStatus.map((item) => ({ text: item, value: item })) : [],
-			prodType: !!prodType.length ? prodType.map((item) => ({ text: item, value: item })) : [],
-			proType1: !!proType1.length ? proType1.map((item) => ({ text: item, value: item })) : [],
-			prodType2: !!prodType2.length ? prodType2.map((item) => ({ text: item, value: item })) : [],
-			prodType3: !!prodType3.length ? prodType3.map((item) => ({ text: item, value: item })) : []
+			sale_cd,
+			sale_status,
+			prod_type,
+			prod_type1,
+			prod_type2,
+			prod_type3
 		};
 	},
-	/**
-	 * @param {{[key: string]: string|number|boolean}} searchTermsObj
-	 */
-	search: async (searchTermsObj) => {
-		const filter = {};
-		Object.keys(searchTermsObj).forEach((key) => {
-			if (searchTermsObj[key]) filter[key] = new RegExp(searchTermsObj[key], 'i');
-		});
 
-		const result = await EquipmentModel.find(searchTermsObj);
-		return result;
-	},
 	/**
 	 * @param {Array<{data:Equipment, type: ActionEnum}>} data
 	 */
 	update: async (data) => {
-		const itemsToInsertOrUpdate = data
+		const dataToModify = data
 			.filter((item) => item.type === ActionEnum.CREATE || item.type === ActionEnum.UPDATE)
 			.map((item) => {
 				if (item.type === ActionEnum.CREATE) {
@@ -56,8 +68,8 @@ export default {
 				}
 				return item.data;
 			});
-
-		const bulkOperations = itemsToInsertOrUpdate.map((item) => ({
+		console.log(dataToModify);
+		const bulkOperations = dataToModify.map((item) => ({
 			updateOne: {
 				filter: { _id: new mongoose.Types.ObjectId(item._id) },
 				update: item,

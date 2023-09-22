@@ -9,9 +9,11 @@ export default {
 	 * @method GET
 	 */
 	getAll: AsyncFn(async (req, res) => {
-		const skip = req.query.skip;
-		const limit = req.query.limit;
-		const equipments = await equipmentService.getAll({ skip, limit });
+		const { limit, page, ...rest } = req.query;
+		const equipments = await equipmentService.getAll({
+			page,
+			filter: rest
+		});
 		const response = new HttpResponse(equipments, 'Ok');
 		return res.status(HttpStatusCode.OK).json(response);
 	}),
@@ -24,24 +26,24 @@ export default {
 		const response = new HttpResponse(lookupFieldValues, 'Ok');
 		return res.status(HttpStatusCode.OK).json(response);
 	}),
-	search: AsyncFn(async (req, res) => {
-		const searchResult = await equipmentService.search(req.body);
-		const response = new HttpResponse(searchResult, 'Ok');
-		return res.status(HttpStatusCode.OK).json(response);
-	}),
 	/**
 	 * @endpoint /equipments/search
 	 * @method PUT
 	 */
 	update: AsyncFn(async (req, res) => {
+		console.log('req.body :>> ', req.body);
 		const result = await equipmentService.update(req.body);
 		const response = new HttpResponse(result, 'Saved successfully');
 		return res.status(HttpStatusCode.CREATED).json(response);
 	}),
+	/**
+	 * @endpoint /equipment/delete
+	 * @method DELETE
+	 */
 	delete: AsyncFn(async (req, res) => {
 		console.log(req.query._ids);
 		if (!req.query._ids) throw createHttpError.BadRequest('"_ids" query param must be provided');
-		const ids = JSON.parse(req.query._ids);
+		const ids = req.query._ids.split(',');
 		const result = await equipmentService.delete(ids);
 		const response = new HttpResponse(result, 'Deleted successfully');
 		return res.status(HttpStatusCode.OK).json(response);

@@ -7,16 +7,6 @@ import UserModel from '../models/user.model';
 
 export default {
 	/**
-	 * @param {Pick<User, 'email' | 'password'>} payload
-	 */
-	signin: async (payload) => {
-		const user = await UserModel.findOne({ email: payload.email });
-		if (!user) throw createHttpError.BadRequest('User not found');
-		if (!user.authenticate(payload.password)) throw createHttpError.BadRequest('Incorrect password');
-		user.password = undefined;
-		return user;
-	},
-	/**
 	 * @param {Omit<User, 'id'>} payload
 	 */
 	createUser: async (payload) => {
@@ -29,16 +19,5 @@ export default {
 	 */
 	getAllUsers: async (param) => {
 		return await UserModel.find().limit(param.limit);
-	},
-
-	/**
-	 * update user info
-	 * @param {string} id
-	 * @param {Partial<User>} payload
-	 */
-	updateUser: async (id, payload) => {
-		const updatedUser = await UserModel.findOneAndUpdate({ _id: id }, payload, { new: true });
-		if (!updatedUser) throw createHttpError.NotFound('User to update not found');
-		return updatedUser;
 	}
 };

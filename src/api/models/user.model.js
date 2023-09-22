@@ -37,6 +37,10 @@ const UserSchema = new mongoose.Schema(
 			type: String,
 			required: true
 		},
+		phone: {
+			type: String,
+			required: true
+		},
 		dateOfBirth: {
 			type: Date,
 			required: true,
@@ -74,6 +78,10 @@ UserSchema.pre('save', function (next) {
 UserSchema.methods.authenticate = function (password) {
 	const result = bcrypt.compareSync(password, this.password);
 	return result;
+};
+
+UserSchema.methods.encryptPassword = function (password) {
+	this.password = bcrypt.hashSync(password, _configs.SALT_ROUND);
 };
 
 UserSchema.plugin(require('mongoose-paginate-v2'));

@@ -1,27 +1,28 @@
-import mongoose, { Model } from 'mongoose';
+import mongoose, { Model, PaginateModel, Document } from 'mongoose';
 import { decimalToJSON } from '../../helpers/global';
+import mongoosePaginate from 'mongoose-paginate-v2';
 
-/**
- * @typedef {Equipment & Document} EquipmentDocument
- * @type {EquipmentDocument}
- */
+/** @type {EquipmentDocument} */
 const EquipmentSchema = new mongoose.Schema(
 	{
+		item_cd: String,
+		prod_type3: String,
+		prod_type1: String,
+		prod_type2: String,
+		prod_type: String,
 		prod_etc1: String,
+		carcass_cd: String,
+		fg_cd: String,
 		sale_status: String,
+		sales_cd: String,
 		sale_dept_cd: String,
 		spec: String,
-		sales_cd: String,
 		width: mongoose.Types.Decimal128,
-		carcass_cd: String,
 		weight: mongoose.Types.Decimal128,
+		length: String,
 		area: mongoose.Types.Decimal128,
 		yag: String,
-		prod_type3: String,
-		pyeong: mongoose.Types.Decimal128,
-		prod_type1: String,
-		prod_type: String,
-		item_cd: String
+		pyeong: mongoose.Types.Decimal128
 	},
 	{
 		timestamps: true,
@@ -37,20 +38,22 @@ EquipmentSchema.set('toJSON', {
 	}
 });
 
-/** @type {Model<EquipmentDocument>} */
+EquipmentSchema.index({ item_cd: 'text', carcass_cd: 'text' });
+EquipmentSchema.plugin(mongoosePaginate);
+
+/** @type {EquipmentPaginateModel} */
 const EquipmentModel = mongoose.model('Equipment', EquipmentSchema);
+
 export default EquipmentModel;
 
-/**@declare */
+/** @declare */
 
 /**
  * @typedef {import('mongoose').Document} Document
  * @typedef {import('mongoose').Model} Model
- */
-
-/**
+ * @typedef {import('mongoose').PaginateModel} PaginateModel
  * @typedef {Equipment & Document} EquipmentDocument
- * @type {EquipmentDocument}
+ * @typedef {PaginateModel<EquipmentDocument>} EquipmentPaginateModel
  */
 
 /**

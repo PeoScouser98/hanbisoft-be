@@ -2,5 +2,5 @@
 	"watch": ["src"],
 	"ext": ".js",
 	"ignore": [],
-	"exec": "SET NODE_ENV=development && nodemon src/app.js --exec babel-node -e js"
+	"exec": "nodemon src/app.js --exec babel-node -e js"
 }
