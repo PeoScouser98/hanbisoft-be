@@ -1,15 +1,10 @@
 import express from 'express';
-import userController from '../controllers/user.controller';
-import authMiddleware from '../middlewares/auth.middleware';
+import UserController from '../controllers/user.controller';
+import AuthMiddleware from '../middlewares/auth.middleware';
 
 const router = express.Router();
 
-router.post(
-	'/users/create-user',
-	authMiddleware.checkAuthenticated,
-	authMiddleware.checkIsAdmin,
-	userController.createUser
-);
-router.get('/users', authMiddleware.checkAuthenticated, authMiddleware.checkIsAdmin, userController.getUsers);
+router.get('/users', AuthMiddleware.checkAuthenticated, AuthMiddleware.checkIsAdmin, UserController.getUsers);
+router.put('/users', AuthMiddleware.checkAuthenticated, AuthMiddleware.checkIsSuperAdmin, UserController.putUsers);
 
 export default router;

@@ -1,26 +1,29 @@
+'use strict';
+
 import HttpStatusCode from '../../constants/httpStatus';
 import { AsyncFn, HttpResponse } from '../../helpers/http';
-import userService from '../services/user.service';
+import UserService from '../services/user.service';
 
-export default {
-	/**
-	 * @endpoint /create-user
-	 * @method POST
-	 * */
-	createUser: AsyncFn(async (req, res) => {
-		const newUser = await userService.createUser(req.body);
-		const response = new HttpResponse(newUser, 'Created new user');
-		return res.status(HttpStatusCode.CREATED).json(response);
-	}),
-
+export default class UserController {
 	/**
 	 * @endpoint /users
 	 * @method GET
 	 * */
-	getUsers: AsyncFn(async (req, res) => {
-		const limit = (req.query.limit ??= 10);
-		const users = await userService.getAllUsers(limit);
+	static getUsers = AsyncFn(async (req, res) => {
+		const currentUserId = req.auth;
+		const filterOptions = req.query;
+		const users = await UserService.getAllUsers(currentUserId, filterOptions);
 		const response = new HttpResponse(users, 'Ok');
 		return res.status(HttpStatusCode.OK).json(response);
-	})
-};
+	});
+	/**
+	 * @endpoint /users/authorize
+	 * @method PATCH
+	 */
+	static putUsers = AsyncFn(async (req, res) => {
+		console.log(req.body);
+		const result = await UserService.putUsers(req.body);
+		const response = new HttpResponse(result, 'Re-Authorized users');
+		return res.status(HttpStatusCode.OK).json(response);
+	});
+}

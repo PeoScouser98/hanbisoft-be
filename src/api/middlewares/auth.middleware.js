@@ -1,3 +1,5 @@
+'use strict';
+
 import createHttpError from 'http-errors';
 import jwt from 'jsonwebtoken';
 import _configs from '../../configs/app.config';
@@ -10,28 +12,37 @@ import { AsyncFn } from '../../helpers/http';
  * @typedef {import('express').NextFunction} NextFunction
  */
 
-export default {
+export default class AuthMiddleware {
 	/**
 	 * @param {Request} req
 	 * @param {Response} res
 	 * @param {NextFunction} next
 	 */
-	checkAuthenticated: AsyncFn(async (req, res, next) => {
-		const { authorization } = req.headers;
-		if (!authorization) throw createHttpError.Unauthorized('Access token must be provided');
-		const accessToken = authorization.replace('Bearer', '').trim();
+	static checkAuthenticated = AsyncFn(async (req, res, next) => {
+		// const { authorization } = req.headers;
+		const accessToken = req.cookies.access_token;
+		if (!accessToken) throw createHttpError.Unauthorized('Access token must be provided');
 		const payload = jwt.verify(accessToken, _configs.JWT_SECRET);
 		req.auth = payload._id;
 		req.role = payload.role;
 		next();
-	}),
+	});
 	/**
 	 * @param {Request} req
 	 * @param {Response} res
 	 * @param {NextFunction} next
 	 */
-	checkIsAdmin: AsyncFn(async (req, res, next) => {
-		if (req.role !== UserRoleEnum.ADMIN) throw createHttpError.Forbidden(`You don't have permission to access`);
+	static checkIsAdmin = AsyncFn(async (req, res, next) => {
+		if (req.role === UserRoleEnum.MEMBER) throw createHttpError.Forbidden(`You don't have permission to access`);
 		next();
-	})
-};
+	});
+	/**
+	 * @param {Request} req
+	 * @param {Response} res
+	 * @param {NextFunction} next
+	 */
+	static checkIsSuperAdmin = AsyncFn(async (req, res, next) => {
+		if (req.role !== UserRoleEnum.SUPER_ADMIN) throw createHttpError.Forbidden(`You don't have permission to access`);
+		next();
+	});
+}

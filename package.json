@@ -3,6 +3,9 @@
 	"version": "1.0.0",
 	"description": "",
 	"main": "src/app.js",
+	"engines": {
+		"node": "18.18"
+	},
 	"scripts": {
 		"dev": "npx nodemon",
 		"start": "SET NODE_ENV=production && node dist/app.js",
@@ -16,6 +19,7 @@
 	"dependencies": {
 		"bcrypt": "^5.1.1",
 		"compression": "^1.7.4",
+		"cookie-parser": "^1.4.6",
 		"cors": "^2.8.5",
 		"crypto": "^1.0.1",
 		"dotenv": "^16.3.1",

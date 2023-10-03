@@ -18,13 +18,13 @@ class HttpException extends Error {
 
 class HttpResponse {
 	message;
-	data;
+	metadata;
 	/**
 	 * @param {unknown} data
 	 * @param {string} message
 	 */
 	constructor(data, message) {
-		this.data = data;
+		this.metadata = data;
 		this.message = message;
 	}
 }

@@ -3,6 +3,9 @@ import 'dotenv/config';
 const { env } = process;
 
 const _configs = {
+	LOCAL_ORIGIN: env.LOCAL_ORIGIN,
+	LOCAL_ORIGIN_PREVIEW: env.LOCAL_ORIGIN_PREVIEW,
+	REMOTE_ORIGIN: env.REMOTE_ORIGIN,
 	MONGO_URI: env.MONGO_URI,
 	PORT: env.PORT,
 	SALT_ROUND: +env.SALT_ROUND,

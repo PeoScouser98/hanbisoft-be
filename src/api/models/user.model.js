@@ -1,20 +1,16 @@
+'use strict';
+
 import mongoose from 'mongoose';
 import bcrypt from 'bcrypt';
 import _configs from '../../configs/app.config';
 import { UserRoleEnum } from '../../constants/enum';
 import generatePictureByName from '../../helpers/generatePicture';
 
-/**
- * @exports @typedef User
- * @readonly @property {mongoose.Types.ObjectId | string} _id
- * @property {string} email
- * @private @property {string} password
- * @property {string} displayName
- * @property {Date} dateOfBirth
- * @property {string} address
- * @property {string} picture
- * @property {number} role
- */
+/** @constant */
+const COLLECTION_NAME = 'users';
+
+/** @constant */
+const DOCUMENT_NAME = 'Users';
 
 /**
  * @type {mongoose.Schema<User> & {authenticate: (string) => boolean}}
@@ -24,7 +20,9 @@ const UserSchema = new mongoose.Schema(
 		email: {
 			type: String,
 			required: true,
-			trim: true
+			trim: true,
+			unique: true,
+			index: true
 		},
 		password: {
 			type: String,
@@ -33,23 +31,21 @@ const UserSchema = new mongoose.Schema(
 			minLength: 6,
 			maxLength: 16
 		},
-		displayName: {
+		display_name: {
 			type: String,
-			required: true
+			required: true,
+			trim: true,
+			index: true
 		},
 		phone: {
 			type: String,
-			required: true
-		},
-		dateOfBirth: {
-			type: Date,
 			required: true,
-			default: new Date()
+			unique: true,
+			trim: true
 		},
 		address: {
 			type: String,
-			trim: true,
-			required: true
+			trim: true
 		},
 		picture: {
 			type: String
@@ -61,7 +57,7 @@ const UserSchema = new mongoose.Schema(
 	},
 	{
 		timestamps: true,
-		collection: 'users'
+		collection: COLLECTION_NAME
 	}
 );
 
@@ -86,6 +82,18 @@ UserSchema.methods.encryptPassword = function (password) {
 
 UserSchema.plugin(require('mongoose-paginate-v2'));
 
-const UserModel = mongoose.model('Users', UserSchema);
+const UserModel = mongoose.model(DOCUMENT_NAME, UserSchema);
 
 export default UserModel;
+
+/**
+ * @exports @typedef User
+ * @readonly @property {mongoose.Types.ObjectId | string} _id
+ * @property {string} email
+ * @private @property {string} password
+ * @property {string} displayName
+ * @property {Date} dateOfBirth
+ * @property {string} address
+ * @property {string} picture
+ * @property {number} role
+ */

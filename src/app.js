@@ -4,13 +4,14 @@ import express from 'express';
 import morgan from 'morgan';
 import rootRouter from './api/routers';
 import _configs from './configs/app.config';
-import './database/mongo.db';
 import HttpStatusCode from './constants/httpStatus';
+import cookieParser from 'cookie-parser';
+import Mongodb from './database/mongo.db';
 
 const app = express();
 
 app.use(express.json());
-
+app.use(cookieParser());
 app.use(
 	compression({
 		threshold: 1024,
@@ -21,7 +22,9 @@ app.use(morgan('tiny'));
 
 app.use(
 	cors({
-		origin: '*',
+		origin: [_configs.LOCAL_ORIGIN, _configs.LOCAL_ORIGIN_PREVIEW, _configs.REMOTE_ORIGIN],
+		credentials: true,
+		preflightContinue: true,
 		methods: ['GET', 'POST', 'PATCH', 'PUT', 'DELETE', 'OPTION']
 	})
 );
@@ -38,3 +41,5 @@ app.get('/', (_, res) =>
 app.listen(_configs.PORT, () => {
 	console.log(`[SUCCESS]: Server is listening on: http://localhost:${_configs.PORT}`);
 });
+
+Mongodb.connect();

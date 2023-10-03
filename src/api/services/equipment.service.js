@@ -1,3 +1,5 @@
+'use strict';
+
 import mongoose, { FilterQuery } from 'mongoose';
 import { ActionEnum } from '../../constants/enum';
 import EquipmentModel from '../models/equipment.model';
@@ -7,9 +9,9 @@ import crypto from 'crypto';
  * @typedef {import('mongoose').FilterQuery} FilterQuery
  */
 
-export default {
-	getAll: async ({ page, filter }) => {
-		/**@type {FilterQuery} */
+export default class EquipmentService {
+	static getEquipments = async ({ page, filter }) => {
+		/** @type {FilterQuery} */
 		const filterQuery = {};
 
 		for (const key in filter) {
@@ -23,8 +25,8 @@ export default {
 			page: page
 		});
 		// .limit(paginate.limit).skip(paginate.skip).sort({ item_cd: 1 });
-	},
-	getLookupValues: async () => {
+	};
+	static getLookupValues = async () => {
 		const [sale_cd, sale_status, prod_type, prod_type1, prod_type2, prod_type3] = await Promise.all([
 			EquipmentModel.find()
 				.distinct('sale_cd')
@@ -53,12 +55,12 @@ export default {
 			prod_type2,
 			prod_type3
 		};
-	},
+	};
 
 	/**
 	 * @param {Array<{data:Equipment, type: ActionEnum}>} data
 	 */
-	update: async (data) => {
+	static updateEquipments = async (data) => {
 		const dataToModify = data
 			.filter((item) => item.type === ActionEnum.CREATE || item.type === ActionEnum.UPDATE)
 			.map((item) => {
@@ -68,7 +70,6 @@ export default {
 				}
 				return item.data;
 			});
-		console.log(dataToModify);
 		const bulkOperations = dataToModify.map((item) => ({
 			updateOne: {
 				filter: { _id: new mongoose.Types.ObjectId(item._id) },
@@ -77,11 +78,11 @@ export default {
 			}
 		}));
 		return await EquipmentModel.bulkWrite(bulkOperations);
-	},
+	};
 	/**
 	 * @param {Array<string>} itemKeys
 	 * */
-	delete: async (itemKeys) => {
+	static deleteEquipments = async (itemKeys) => {
 		return await EquipmentModel.deleteMany({ _id: { $in: itemKeys } });
-	}
-};
+	};
+}

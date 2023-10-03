@@ -1,3 +1,5 @@
+'use strict';
+
 import _configs from '../../configs/app.config';
 import nodemailer from 'nodemailer';
 import oAuth2Client from '../../configs/googleapis.config';

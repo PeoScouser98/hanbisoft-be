@@ -2,6 +2,12 @@ import mongoose, { Model, PaginateModel, Document } from 'mongoose';
 import { decimalToJSON } from '../../helpers/global';
 import mongoosePaginate from 'mongoose-paginate-v2';
 
+/** @constant */
+const COLLECTION_NAME = 'equipments';
+
+/** @constant */
+const DOCUMENT_NAME = 'Equipment';
+
 /** @type {EquipmentDocument} */
 const EquipmentSchema = new mongoose.Schema(
 	{
@@ -26,7 +32,7 @@ const EquipmentSchema = new mongoose.Schema(
 	},
 	{
 		timestamps: true,
-		collection: 'equipments',
+		collection: COLLECTION_NAME,
 		toJSON: true
 	}
 );
@@ -42,7 +48,7 @@ EquipmentSchema.index({ item_cd: 'text', carcass_cd: 'text' });
 EquipmentSchema.plugin(mongoosePaginate);
 
 /** @type {EquipmentPaginateModel} */
-const EquipmentModel = mongoose.model('Equipment', EquipmentSchema);
+const EquipmentModel = mongoose.model(DOCUMENT_NAME, EquipmentSchema);
 
 export default EquipmentModel;
 
@@ -57,7 +63,7 @@ export default EquipmentModel;
  */
 
 /**
- * @typedef Equipment
+ * @exports @typedef Equipment
  * @property {mongoose.Types.ObjectId | string} _id
  * @property {string} prod_etc1
  * @property {string} sale_status

@@ -1,3 +1,5 @@
+'use strict';
+/**@jsdocs */
 import createHttpError from 'http-errors';
 import UserModel from '../models/user.model';
 import bcrypt from 'bcrypt';
@@ -5,39 +7,40 @@ import _configs from '../../configs/app.config';
 import crypto from 'crypto';
 import sendMail from './nodemailer.service';
 
-export default {
+export default class AuthService {
 	/**
 	 * @param {Pick<User, 'email' | 'password'>} payload
 	 */
-	signin: async (payload) => {
+	static signin = async (payload) => {
+		console.log(payload);
 		const user = await UserModel.findOne({ email: payload.email });
 		if (!user) throw createHttpError.BadRequest('User not found');
 		if (!user.authenticate(payload.password)) throw createHttpError.BadRequest('Incorrect password');
 		user.password = undefined;
 		return user;
-	},
+	};
 	/**
 	 * @param {string} authId
 	 */
-	getUserInfo: async (authId) => {
+	static getUserInfo = async (authId) => {
 		return await UserModel.findById(authId).select('-password');
-	},
+	};
 	/**
 	 * update user info
 	 * @param {string} id
 	 * @param {Partial<User>} payload
 	 */
-	updateUser: async (id, payload) => {
+	static updateUser = async (id, payload) => {
 		const updatedUser = await UserModel.findOneAndUpdate({ _id: id }, payload, { new: true });
 		if (!updatedUser) throw createHttpError.NotFound('User to update not found');
 		updatedUser.password = undefined;
 		return updatedUser;
-	},
+	};
 	/**
 	 * @param {string} authId
 	 * @param {{currentPassword: string, newPassword: string, confirmNewPassword: string}} payload
 	 */
-	changePassword: async (authId, payload) => {
+	static changePassword = async (authId, payload) => {
 		const user = await UserModel.findById(authId);
 		if (user.authenticate(payload.currentPassword) === false)
 			throw createHttpError.UnprocessableEntity('Incorrect current password');
@@ -48,11 +51,11 @@ export default {
 		);
 		result.password = undefined;
 		return result;
-	},
+	};
 	/**
 	 * @param {string} email
 	 */
-	recoverPassword: async (email) => {
+	static recoverPassword = async (email) => {
 		const user = await UserModel.findOne({ email: email });
 		if (!user) throw createHttpError.NotFound('Account does not exist!');
 		const randomPassword = crypto.randomBytes(12).toString('hex').slice(0, 6);
@@ -73,5 +76,5 @@ export default {
 		);
 		result.password = undefined;
 		return result;
-	}
-};
+	};
+}
