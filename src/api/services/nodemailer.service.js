@@ -12,6 +12,7 @@ import createHttpError from 'http-errors';
 export default async function sendMail({ to, subject, text = '', html = '' }) {
 	try {
 		const accessToken = await oAuth2Client.getAccessToken();
+
 		const transporter = nodemailer.createTransport({
 			service: 'gmail',
 			port: _configs.MAILER_PORT,
@@ -45,6 +46,5 @@ export default async function sendMail({ to, subject, text = '', html = '' }) {
 		);
 	} catch (error) {
 		console.log(error.message);
-		throw createHttpError.InternalServerError('Failed to send mail');
 	}
 }

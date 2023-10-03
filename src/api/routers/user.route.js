@@ -6,5 +6,11 @@ const router = express.Router();
 
 router.get('/users', AuthMiddleware.checkAuthenticated, AuthMiddleware.checkIsAdmin, UserController.getUsers);
 router.put('/users', AuthMiddleware.checkAuthenticated, AuthMiddleware.checkIsSuperAdmin, UserController.putUsers);
+router.delete(
+	'/users/deactivate',
+	AuthMiddleware.checkAuthenticated,
+	AuthMiddleware.checkIsSuperAdmin,
+	UserController.deleteUsers
+);
 
 export default router;

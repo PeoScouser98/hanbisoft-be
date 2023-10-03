@@ -26,4 +26,15 @@ export default class UserController {
 		const response = new HttpResponse(result, 'Re-Authorized users');
 		return res.status(HttpStatusCode.OK).json(response);
 	});
+	/**
+	 * @endpoint /users/deactivate
+	 * @method DELETE
+	 */
+	static deleteUsers = AsyncFn(async (req, res) => {
+		if (!req.query._ids) throw createHttpError.BadRequest('"_ids" query param must be provided');
+		const ids = req.query._ids.split(',');
+		const result = await UserService.deactivateUsers(ids);
+		const response = new HttpResponse(result, 'Deleted users');
+		return res.status(HttpStatusCode.OK).json(response);
+	});
 }

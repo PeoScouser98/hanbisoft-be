@@ -7,6 +7,7 @@ import _configs from './configs/app.config';
 import HttpStatusCode from './constants/httpStatus';
 import cookieParser from 'cookie-parser';
 import Mongodb from './database/mongo.db';
+import oAuth2Client from './configs/googleapis.config';
 
 const app = express();
 
