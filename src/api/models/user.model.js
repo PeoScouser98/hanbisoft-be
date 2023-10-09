@@ -1,9 +1,8 @@
 'use strict';
 
-import mongoose from 'mongoose';
 import bcrypt from 'bcrypt';
-import _configs from '../../configs/app.config';
-import { UserRoleEnum } from '../../constants/enum';
+import mongoose from 'mongoose';
+import __configs from '../../configs/app.config';
 import generatePictureByName from '../../helpers/generatePicture';
 
 /** @constant */
@@ -13,7 +12,7 @@ const COLLECTION_NAME = 'users';
 const DOCUMENT_NAME = 'Users';
 
 /**
- * @type {mongoose.Schema<User> & {authenticate: (string) => boolean}}
+ * @type {User & Document & {authenticate: (string) => boolean}}
  */
 const UserSchema = new mongoose.Schema(
 	{
@@ -50,8 +49,9 @@ const UserSchema = new mongoose.Schema(
 			type: String
 		},
 		role: {
-			type: Number,
-			enum: Object.values(UserRoleEnum)
+			type: mongoose.Schema.Types.ObjectId,
+			ref: 'UserRoles'
+			// autopopulate: true
 		}
 	},
 	{
@@ -61,7 +61,7 @@ const UserSchema = new mongoose.Schema(
 );
 
 UserSchema.pre('save', function (next) {
-	this.password = bcrypt.hashSync(this.password, bcrypt.genSaltSync(_configs.SALT_ROUND));
+	this.password = bcrypt.hashSync(this.password, bcrypt.genSaltSync(__configs.SALT_ROUND));
 	this.picture = generatePictureByName(this.displayName);
 	next();
 });
@@ -75,24 +75,29 @@ UserSchema.methods.authenticate = function (password) {
 	return result;
 };
 
+/**
+ * Encrypt password before save
+ * @param {string} password
+ */
 UserSchema.methods.encryptPassword = function (password) {
-	this.password = bcrypt.hashSync(password, _configs.SALT_ROUND);
+	this.password = bcrypt.hashSync(password, __configs.SALT_ROUND);
 };
 
 UserSchema.plugin(require('mongoose-paginate-v2'));
+UserSchema.plugin(require('mongoose-autopopulate'));
 
 const UserModel = mongoose.model(DOCUMENT_NAME, UserSchema);
 
 export default UserModel;
 
 /**
- * @exports @typedef User
- * @readonly @property {mongoose.Types.ObjectId | string} _id
+ * @typedef User
+ * @property {mongoose.Types.ObjectId | string} _id
  * @property {string} email
- * @private @property {string} password
+ * @property {string} password
  * @property {string} displayName
  * @property {Date} dateOfBirth
  * @property {string} address
  * @property {string} picture
- * @property {number} role
+ * @property {mongoose.Types.ObjectId | string} role
  */

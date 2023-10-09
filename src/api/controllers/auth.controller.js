@@ -4,7 +4,7 @@ import AuthService from '../services/auth.service';
 import jwt from 'jsonwebtoken';
 import UserModel from '../models/user.model';
 import HttpStatusCode from '../../constants/httpStatus';
-import _configs from '../../configs/app.config';
+import __configs from '../../configs/app.config';
 import cookieConfig from '../../configs/cookie.config';
 
 export default class AuthController {
@@ -14,10 +14,10 @@ export default class AuthController {
 	 * */
 	static signin = AsyncFn(async (req, res) => {
 		const user = await AuthService.signin(req.body);
-		const accessToken = jwt.sign({ _id: user._id, email: user.email, role: user.role }, _configs.JWT_SECRET, {
-			expiresIn: _configs.JWT_EXPIRES
+		const accessToken = jwt.sign({ _id: user._id, email: user.email, role: user.role }, __configs.JWT_SECRET, {
+			expiresIn: __configs.JWT_EXPIRES
 		});
-		const response = new HttpResponse({ user, accessToken }, 'Signed in successfully');
+		const response = new HttpResponse({ user, accessToken }, 'Signed in successfully', HttpStatusCode.OK);
 		return res.status(HttpStatusCode.OK).cookie('access_token', accessToken, cookieConfig).json(response);
 	});
 	/**
@@ -27,7 +27,7 @@ export default class AuthController {
 	static getUserInfo = AsyncFn(async (req, res) => {
 		console.log(req.auth);
 		const currentUser = await AuthService.getUserInfo(req.auth);
-		const response = new HttpResponse(currentUser);
+		const response = new HttpResponse(currentUser, null, HttpStatusCode.OK);
 		return res.status(HttpStatusCode.OK).json(response);
 	});
 	/**
@@ -39,10 +39,10 @@ export default class AuthController {
 		if (!id) throw createHttpError.BadRequest('Failed to get refresh token due to missing auth ID');
 		const user = await UserModel.findById(id);
 		if (!user) throw createHttpError.NotFound('Failed to get refresh token due to unable to find user');
-		const refreshToken = jwt.sign({ _id: user._id, email: user.email, role: user.role }, _configs.JWT_SECRET, {
-			expiresIn: _configs.JWT_EXPIRES
+		const refreshToken = jwt.sign({ _id: user._id, email: user.email, role: user.role }, __configs.JWT_SECRET, {
+			expiresIn: __configs.JWT_EXPIRES
 		});
-		const response = new HttpResponse(refreshToken, 'Get refresh token successfully');
+		const response = new HttpResponse(refreshToken, 'Get refresh token successfully', HttpStatusCode.OK);
 
 		return res.status(HttpStatusCode.OK).cookie('access_token', refreshToken, cookieConfig).json(response);
 	});
@@ -54,7 +54,7 @@ export default class AuthController {
 		const authId = req.auth;
 		console.log('authId :>> ', authId);
 		const updatedUser = await AuthService.updateUser(authId, req.body);
-		const response = new HttpResponse(updatedUser, `Updated user's info`);
+		const response = new HttpResponse(updatedUser, `Updated user's info`, HttpStatusCode.CREATED);
 		return res.status(HttpStatusCode.CREATED).json(response);
 	});
 	/**
@@ -64,7 +64,7 @@ export default class AuthController {
 	static changePassword = AsyncFn(async (req, res) => {
 		const authId = req.auth;
 		const result = await AuthService.changePassword(authId, req.body);
-		const response = new HttpResponse(result, 'Change password successfully');
+		const response = new HttpResponse(result, 'Change password successfully', HttpStatusCode.CREATED);
 		return res.status(HttpStatusCode.CREATED).json(response);
 	});
 	/**
@@ -74,7 +74,7 @@ export default class AuthController {
 	static recoverPassword = AsyncFn(async (req, res) => {
 		const email = req.body.email;
 		await AuthService.recoverPassword(email);
-		const response = new HttpResponse(null, 'Check your email to get new password!');
+		const response = new HttpResponse(null, 'Check your email to get new password!', HttpStatusCode.OK);
 		return res.status(HttpStatusCode.OK).json(response);
 	});
 }

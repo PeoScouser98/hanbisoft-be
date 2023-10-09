@@ -1,8 +1,8 @@
 'use strict';
 
-import _configs from '../../configs/app.config';
+import __configs from '../../configs/app.config';
 import nodemailer from 'nodemailer';
-import oAuth2Client from '../../configs/googleapis.config';
+import OAuth2Client from '../../configs/googleapis.config';
 import createHttpError from 'http-errors';
 
 /**
@@ -11,19 +11,19 @@ import createHttpError from 'http-errors';
  */
 export default async function sendMail({ to, subject, text = '', html = '' }) {
 	try {
-		const accessToken = await oAuth2Client.getAccessToken();
+		const accessToken = await OAuth2Client.getAccessToken();
 
 		const transporter = nodemailer.createTransport({
 			service: 'gmail',
-			port: _configs.MAILER_PORT,
+			port: __configs.MAILER_PORT,
 			secure: true,
 			auth: {
 				type: 'OAuth2',
-				user: _configs.MAILER_AUTH,
-				pass: _configs.MAILER_PASSWORD,
-				clientId: _configs.OAUTH2_CLIENT_ID,
-				clientSecret: _configs.OAUTH2_CLIENT_SECRET,
-				refreshToken: _configs.OAUTH2_REFRESH_TOKEN,
+				user: __configs.MAILER_AUTH,
+				pass: __configs.MAILER_PASSWORD,
+				clientId: __configs.OAUTH2_CLIENT_ID,
+				clientSecret: __configs.OAUTH2_CLIENT_SECRET,
+				refreshToken: __configs.OAUTH2_REFRESH_TOKEN,
 				accessToken
 			},
 			tls: {

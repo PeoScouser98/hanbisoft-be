@@ -1,7 +1,5 @@
 {
-	"compilerOptions": {
-		// "baseUrl": ".",
-	},
-	"include": ["src/**/*"],
+	"compilerOptions": {},
+	"include": ["src/**/*", "dist"],
 	"exclude": ["node_modules"]
 }

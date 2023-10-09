@@ -1,15 +1,28 @@
 {
 	"version": 2,
+	"buildCommand": "npm run build",
+	"installCommand": "npm install",
+	"outputDirectory": "dist",
 	"builds": [
 		{
-			"src": "dist/app.js",
+			"src": "package.json",
+			"use": "@vercel/static-build",
+			"config": { "distDir": "dist", "include": "dist", "includeFiles": "dist/index.js", "use": "@vercel/node" }
+		},
+		{
+			"src": "dist/index.js",
 			"use": "@vercel/node"
 		}
 	],
+	"functions": {
+		"dist/index.js": {
+			"runtime": "nodejs18.x"
+		}
+	},
 	"routes": [
 		{
 			"src": "/(.*)",
-			"dest": "dist/app.js"
+			"dest": "dist/index.js"
 		}
 	]
 }

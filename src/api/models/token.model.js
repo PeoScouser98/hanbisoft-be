@@ -25,7 +25,8 @@ const TokenSchema = new mongoose.Schema(
 	},
 	{
 		collection: COLLECTION_NAME,
-		timestamps: true
+		timestamps: true,
+		expires: '30d'
 	}
 );
 

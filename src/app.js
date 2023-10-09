@@ -1,13 +1,13 @@
 import compression from 'compression';
+import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import express from 'express';
 import morgan from 'morgan';
 import rootRouter from './api/routers';
-import _configs from './configs/app.config';
+import __configs from './configs/app.config';
 import HttpStatusCode from './constants/httpStatus';
-import cookieParser from 'cookie-parser';
-import Mongodb from './database/mongo.db';
-import oAuth2Client from './configs/googleapis.config';
+import helmet from 'helmet';
+import Database from './database/mongo.db';
 
 const app = express();
 
@@ -19,13 +19,13 @@ app.use(
 		level: 6
 	})
 );
+app.use(helmet());
 app.use(morgan('tiny'));
 
 app.use(
 	cors({
-		origin: [_configs.LOCAL_ORIGIN, _configs.LOCAL_ORIGIN_PREVIEW, _configs.REMOTE_ORIGIN],
+		origin: [__configs.LOCAL_ORIGIN, __configs.LOCAL_ORIGIN_PREVIEW, __configs.REMOTE_ORIGIN],
 		credentials: true,
-		preflightContinue: true,
 		methods: ['GET', 'POST', 'PATCH', 'PUT', 'DELETE', 'OPTION']
 	})
 );
@@ -34,13 +34,13 @@ app.use('/api', rootRouter);
 
 app.get('/', (_, res) =>
 	res.status(HttpStatusCode.OK).json({
-		message: 'Server now is running',
+		message: 'Server now is ready !',
 		status: 200
 	})
 );
 
-app.listen(_configs.PORT, () => {
-	console.log(`[SUCCESS]: Server is listening on: http://localhost:${_configs.PORT}`);
+app.listen(__configs.PORT, () => {
+	console.log(`[SUCCESS]: Server is listening on: http://localhost:${__configs.PORT}`);
 });
 
-Mongodb.connect();
+Database.getInstance();

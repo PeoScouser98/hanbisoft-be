@@ -13,7 +13,7 @@ export default class UserController {
 		const currentUserId = req.auth;
 		const filterOptions = req.query;
 		const users = await UserService.getAllUsers(currentUserId, filterOptions);
-		const response = new HttpResponse(users, 'Ok');
+		const response = new HttpResponse(users, 'Ok', HttpStatusCode.OK);
 		return res.status(HttpStatusCode.OK).json(response);
 	});
 	/**
@@ -23,7 +23,7 @@ export default class UserController {
 	static putUsers = AsyncFn(async (req, res) => {
 		console.log(req.body);
 		const result = await UserService.putUsers(req.body);
-		const response = new HttpResponse(result, 'Re-Authorized users');
+		const response = new HttpResponse(result, 'Users are updated', HttpStatusCode.OK);
 		return res.status(HttpStatusCode.OK).json(response);
 	});
 	/**
@@ -34,7 +34,7 @@ export default class UserController {
 		if (!req.query._ids) throw createHttpError.BadRequest('"_ids" query param must be provided');
 		const ids = req.query._ids.split(',');
 		const result = await UserService.deactivateUsers(ids);
-		const response = new HttpResponse(result, 'Deleted users');
-		return res.status(HttpStatusCode.OK).json(response);
+		const response = new HttpResponse(result, 'Deleted users', HttpStatusCode.NO_CONTENT);
+		return res.status(HttpStatusCode.NO_CONTENT).json(response);
 	});
 }

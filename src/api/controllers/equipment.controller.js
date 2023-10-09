@@ -16,7 +16,7 @@ export default class EquipmentController {
 			page,
 			filter: rest
 		});
-		const response = new HttpResponse(equipments, 'Ok');
+		const response = new HttpResponse(equipments, 'Ok', HttpStatusCode.OK);
 		return res.status(HttpStatusCode.OK).json(response);
 	});
 	/**
@@ -25,7 +25,7 @@ export default class EquipmentController {
 	 */
 	static getLookupValues = AsyncFn(async (req, res) => {
 		const lookupFieldValues = await EquipmentService.getLookupValues();
-		const response = new HttpResponse(lookupFieldValues, 'Ok');
+		const response = new HttpResponse(lookupFieldValues, 'Ok', HttpStatusCode.OK);
 		return res.status(HttpStatusCode.OK).json(response);
 	});
 	/**
@@ -34,7 +34,7 @@ export default class EquipmentController {
 	 */
 	static updateEquipments = AsyncFn(async (req, res) => {
 		const result = await EquipmentService.updateEquipments(req.body);
-		const response = new HttpResponse(result, 'Saved successfully');
+		const response = new HttpResponse(result, 'Saved successfully', HttpStatusCode.CREATED);
 		return res.status(HttpStatusCode.CREATED).json(response);
 	});
 	/**
@@ -45,7 +45,7 @@ export default class EquipmentController {
 		if (!req.query._ids) throw createHttpError.BadRequest('"_ids" query param must be provided');
 		const ids = req.query._ids.split(',');
 		const result = await EquipmentService.deleteEquipments(ids);
-		const response = new HttpResponse(result, 'Deleted successfully');
-		return res.status(HttpStatusCode.OK).json(response);
+		const response = new HttpResponse(result, 'Deleted successfully', HttpStatusCode.NO_CONTENT);
+		return res.status(HttpStatusCode.NO_CONTENT).json(response);
 	});
 }

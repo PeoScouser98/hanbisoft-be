@@ -2,7 +2,7 @@
 
 import createHttpError from 'http-errors';
 import jwt from 'jsonwebtoken';
-import _configs from '../../configs/app.config';
+import __configs from '../../configs/app.config';
 import { UserRoleEnum } from '../../constants/enum';
 import { AsyncFn } from '../../helpers/http';
 
@@ -22,9 +22,9 @@ export default class AuthMiddleware {
 		// const { authorization } = req.headers;
 		const accessToken = req.cookies.access_token;
 		if (!accessToken) throw createHttpError.Unauthorized('Access token must be provided');
-		const payload = jwt.verify(accessToken, _configs.JWT_SECRET);
+		const payload = jwt.verify(accessToken, __configs.JWT_SECRET);
 		req.auth = payload._id;
-		req.role = payload.role;
+		req.role = payload.role?.role_cd;
 		next();
 	});
 	/**

@@ -1,14 +1,21 @@
 'use strict';
 
+import { FilterQuery } from 'mongoose';
 import crypto from 'crypto';
 import createHttpError from 'http-errors';
 import { ActionEnum, UserRoleEnum } from '../../constants/enum';
 import UserModel from '../models/user.model';
 import sendMail from './nodemailer.service';
 import bcrypt from 'bcrypt';
-import _configs from '../../configs/app.config';
+import __configs from '../../configs/app.config';
+import generatePictureByName from '../../helpers/generatePicture';
+import UserRoleModel from '../models/user_role.model';
 
-/** @typedef {import('../models/user.model').User} User */
+/**
+ *  @typedef {import('../models/user.model').User} User
+ *  @typedef {import('../models/user_role.model').UserRole} UserRole
+ *  @typedef {import('mongoose').FilterQuery} FilterQuery
+ */
 
 export default class UserService {
 	/** @param {Omit<User, 'id'>} payload */
@@ -20,16 +27,20 @@ export default class UserService {
 
 	/** @param {currentUserId: string, page: number} _params */
 	static getAllUsers = async (currentUserId, filterOptions = {}) => {
-		/** @type {FilterQuery} */
-		const filterQuery = {};
+		const superAdminRole = await UserRoleModel.findOne({ role_cd: UserRoleEnum.SUPER_ADMIN });
+
+		/**
+		 * @type {FilterQuery<User>}
+		 */
+		const filter = {
+			role: { $ne: superAdminRole._id }
+		};
 
 		for (const key in filterOptions) {
-			if (!!filterOptions[key]) filterQuery[key] = new RegExp(`^${filterOptions[key]}`, 'gi');
+			if (!!filterOptions[key]) filter[key] = new RegExp(`^${filterOptions[key]}`, 'gi');
 		}
-
-		return await UserModel.find({
-			$and: [{ _id: { $ne: currentUserId } }, { role: { $ne: UserRoleEnum.SUPER_ADMIN } }, filterQuery]
-		});
+		/** @param {FilterQuery<User>} filter */
+		return await UserModel.find(filter);
 	};
 
 	/** @param {Array<Partial<User>>} payload */
@@ -43,7 +54,8 @@ export default class UserService {
 					...item.data,
 					_id: crypto.randomBytes(12).toString('hex'),
 					_password: randomPassword,
-					password: bcrypt.hashSync(randomPassword, _configs.SALT_ROUND)
+					picture: generatePictureByName(item.data?.display_name),
+					password: bcrypt.hashSync(randomPassword, __configs.SALT_ROUND)
 				};
 			});
 

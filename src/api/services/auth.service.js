@@ -3,7 +3,7 @@
 import createHttpError from 'http-errors';
 import UserModel from '../models/user.model';
 import bcrypt from 'bcrypt';
-import _configs from '../../configs/app.config';
+import __configs from '../../configs/app.config';
 import crypto from 'crypto';
 import sendMail from './nodemailer.service';
 
@@ -47,7 +47,7 @@ export default class AuthService {
 
 		const result = await UserModel.findOneAndUpdate(
 			{ _id: user._id },
-			{ password: bcrypt.hashSync(payload.newPassword, _configs.SALT_ROUND) }
+			{ password: bcrypt.hashSync(payload.newPassword, __configs.SALT_ROUND) }
 		);
 		result.password = undefined;
 		return result;
@@ -70,7 +70,7 @@ export default class AuthService {
 		const result = await UserModel.findOneAndUpdate(
 			{ email: email },
 			{
-				password: bcrypt.hashSync(randomPassword, _configs.SALT_ROUND)
+				password: bcrypt.hashSync(randomPassword, __configs.SALT_ROUND)
 			},
 			{ new: true }
 		);

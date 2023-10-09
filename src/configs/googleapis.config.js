@@ -1,12 +1,13 @@
 import { google } from 'googleapis';
-import _configs from './app.config';
+import __configs from './app.config';
 
-const oAuth2Client = new google.auth.OAuth2(
-	_configs.OAUTH2_CLIENT_ID,
-	_configs.OAUTH2_CLIENT_SECRET,
-	_configs.OAUTH2_REDIRECT_URI
+const OAuth2Client = new google.auth.OAuth2(
+	__configs.OAUTH2_CLIENT_ID,
+	__configs.OAUTH2_CLIENT_SECRET,
+	__configs.OAUTH2_REDIRECT_URI
 );
 
-oAuth2Client.setCredentials({ refresh_token: _configs.OAUTH2_REFRESH_TOKEN });
+OAuth2Client.setCredentials({ refresh_token: __configs.OAUTH2_REFRESH_TOKEN });
+OAuth2Client.getAccessToken().catch((error) => console.log(error.message));
 
-export default oAuth2Client;
+export default OAuth2Client;
