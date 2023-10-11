@@ -5,25 +5,19 @@
 	"outputDirectory": "dist",
 	"builds": [
 		{
-			"src": "package.json",
+			"src": "src/app.js",
 			"use": "@vercel/static-build",
-			"config": { "distDir": "dist", "include": "dist", "includeFiles": "dist/index.js", "use": "@vercel/node" }
+			"config": { "distDir": "dist" }
 		},
 		{
-			"src": "dist/index.js",
+			"src": "dist/app.js",
 			"use": "@vercel/node"
 		}
 	],
-	"functions": {
-		"dist/index.js": {
-			"runtime": "nodejs18.x",
-			"use": "@vercel/node"
-		}
-	},
 	"routes": [
 		{
 			"src": "/(.*)",
-			"dest": "dist/index.js"
+			"dest": "dist/app.js"
 		}
 	]
 }
