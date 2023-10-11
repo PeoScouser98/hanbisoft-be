@@ -1,12 +1,12 @@
-import mongoose, { Model, PaginateModel, Document } from 'mongoose';
-import { decimalToJSON } from '../../helpers/global';
+import mongoose, { Document, PaginateModel } from 'mongoose';
 import mongoosePaginate from 'mongoose-paginate-v2';
+import { decimalToJSON } from '../../helpers/global';
 
 /** @constant */
 const COLLECTION_NAME = 'equipments';
 
 /** @constant */
-const DOCUMENT_NAME = 'Equipment';
+const DOCUMENT_NAME = 'Equipments';
 
 /** @type {EquipmentDocument} */
 const EquipmentSchema = new mongoose.Schema(

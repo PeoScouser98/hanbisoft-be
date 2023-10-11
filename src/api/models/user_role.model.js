@@ -22,15 +22,15 @@ const UserRolesSchema = new mongoose.Schema(
 			unique: true
 		},
 		permissions: {
-			allowAccesss: Boolean,
-			allowAdding: Boolean,
-			allowUpdating: Boolean,
-			allowDeleting: Boolean
+			allow_adding: Boolean,
+			allow_updating: Boolean,
+			allow_deleting: Boolean
 		}
 	},
 	{
 		collection: COLLECTION_NAME,
-		timestamps: true
+		timestamps: true,
+		versionKey: false
 	}
 );
 

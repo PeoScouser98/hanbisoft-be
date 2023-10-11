@@ -1,0 +1,23 @@
+{
+	"components": {
+		"schemas": {
+			"User": {
+				"type": "object",
+				"properties": {
+					"_id": {
+						"type": "string"
+					},
+					"display_name": {
+						"type": "string"
+					},
+					"email": {
+						"type": "string"
+					},
+					"password": {
+						"type": "string"
+					}
+				}
+			}
+		}
+	}
+}

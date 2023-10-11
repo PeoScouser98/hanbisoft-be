@@ -12,8 +12,8 @@ export default class AuthService {
 	 * @param {Pick<User, 'email' | 'password'>} payload
 	 */
 	static signin = async (payload) => {
-		console.log(payload);
-		const user = await UserModel.findOne({ email: payload.email });
+		const user = await UserModel.findOne({ email: payload.email }).populate('role');
+		console.log(user);
 		if (!user) throw createHttpError.BadRequest('User not found');
 		if (!user.authenticate(payload.password)) throw createHttpError.BadRequest('Incorrect password');
 		user.password = undefined;

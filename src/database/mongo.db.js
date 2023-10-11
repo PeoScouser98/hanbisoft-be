@@ -4,7 +4,7 @@ import __configs from '../configs/app.config';
 // Singleton pattern
 export default class Database {
 	/**@private */
-	#mongoConnectString = __configs.MONGO_CONNECT_STRING;
+	#mongoURI = __configs.MONGO_URI;
 
 	constructor() {
 		this.#connect();
@@ -15,7 +15,8 @@ export default class Database {
 		{
 			try {
 				mongoose.set('strictQuery', false);
-				await mongoose.connect(this.#mongoConnectString, {
+				mongoose.set('strictPopulate', false);
+				await mongoose.connect(this.#mongoURI, {
 					maxPoolSize: 100, // If number of connection > 100, the 101st connection must wait until there is at least one connection are free
 					connectTimeoutMS: 10000
 				});
@@ -32,10 +33,3 @@ export default class Database {
 		return Database.instance;
 	}
 }
-
-// if (__configs.NODE_ENV === 'development') {
-// 	mongoose.set('debug', true);
-// 	mongoose.set('debug', {
-// 		color: true
-// 	});
-// }

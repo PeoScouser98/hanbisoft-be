@@ -39,8 +39,10 @@ export default class UserService {
 		for (const key in filterOptions) {
 			if (!!filterOptions[key]) filter[key] = new RegExp(`^${filterOptions[key]}`, 'gi');
 		}
+
 		/** @param {FilterQuery<User>} filter */
-		return await UserModel.find(filter);
+		const users = await UserModel.find(filter);
+		return users;
 	};
 
 	/** @param {Array<Partial<User>>} payload */
@@ -72,11 +74,11 @@ export default class UserService {
 				})
 			);
 		}
+
 		// Update users
 		const updateUsers = payload
-			.filter((item) => item.type === ActionEnum.UPDATE)
+			.filter((item) => item.type === ActionEnum.UPDATE && !!item.data)
 			.map((item) => item.data)
-			.filter((item) => !!item)
 			.concat(newUsers);
 		const bulkWriteOptions = updateUsers.map((item) => ({
 			updateOne: {

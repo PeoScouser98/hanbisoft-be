@@ -1,0 +1,37 @@
+{
+	"paths": {
+		"/auth/signin": {
+			"post": {
+				"summary": "Login with email and password",
+				"tags": ["Auth"],
+				"requestBody": {
+					"type": "object",
+					"content": {
+						"application/json": {
+							"schema": {
+								"properties": {
+									"email": {
+										"type": "string",
+										"required": true,
+										"regex": "/^[w.+-]+@gmail.com$/"
+									},
+									"password": {
+										"type": "string",
+										"required": true
+									}
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"schema": {
+							"$ref": "#components/schemas/User"
+						}
+					}
+				}
+			}
+		}
+	}
+}

@@ -10,6 +10,7 @@
 		"dev": "npx nodemon",
 		"start": "SET NODE_ENV=production && node dist/app.js",
 		"build": "rm -rf dist && npx webpack --config webpack.config.js",
+		"vercel-build": "rm -rf dist && npx webpack --config webpack.config.js",
 		"vite:dev": "vite",
 		"vite:build": "vite build",
 		"test": "jest -i --colors --verbose --detectOpenHandles",

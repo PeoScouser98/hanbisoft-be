@@ -1,8 +1,7 @@
 /**@enum */
 export const UserRoleEnum = {
 	SUPER_ADMIN: 0,
-	ADMIN: 1,
-	MEMBER: 2
+	ADMIN: 1
 };
 
 /**@enum */

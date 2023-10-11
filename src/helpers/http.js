@@ -43,10 +43,10 @@ class HttpResponse {
  * @param {AsyncFunction} fn
  * @return {(req: Request, res:Response, next: NextFunction) => Promise<e.Response<any, Record<string, any>>>}
  */
-const AsyncFn = (fn) => (req, res, next) =>
+const useAsync = (fn) => (req, res, next) =>
 	Promise.resolve(fn(req, res, next)).catch((error) => {
 		const httpException = new HttpException(error);
 		return res.status(httpException.status).json(httpException);
 	});
 
-export { AsyncFn, HttpException, HttpResponse };
+export { useAsync, HttpException, HttpResponse };

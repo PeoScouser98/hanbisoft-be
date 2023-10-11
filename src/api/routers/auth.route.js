@@ -11,4 +11,21 @@ router.post('/auth/recover-password', AuthController.recoverPassword);
 router.patch('/auth/update-info', AuthMiddleware.checkAuthenticated, AuthController.updateUser);
 router.patch('/auth/change-password', AuthMiddleware.checkAuthenticated, AuthController.changePassword);
 
+/**
+ * @swagger
+ *   /auth/signin:
+ *     post:
+ *       summary: Signin with email and password
+ *       tags: ['Auth'],
+ *       requestBody:
+ *         type: object
+ *         schema:
+ *           content:
+ *             application/json:
+ *
+ *
+ *
+ *
+ */
+
 export default router;

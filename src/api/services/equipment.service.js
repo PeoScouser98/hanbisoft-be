@@ -17,6 +17,7 @@ export default class EquipmentService {
 		for (const key in filter) {
 			if (filter[key]) filterQuery[key] = new RegExp(`^${filter[key]}`, 'gi');
 		}
+
 		return await EquipmentModel.paginate(filterQuery, {
 			sort: {
 				item_cd: 1
@@ -60,7 +61,7 @@ export default class EquipmentService {
 	/**
 	 * @param {Array<{data:Equipment, type: ActionEnum}>} data
 	 */
-	static updateEquipments = async (data) => {
+	static upsertEquipments = async (data) => {
 		const dataToModify = data
 			.filter((item) => item.type === ActionEnum.CREATE || item.type === ActionEnum.UPDATE)
 			.map((item) => {

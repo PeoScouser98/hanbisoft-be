@@ -12,7 +12,7 @@ const __configs = {
 	SALT_ROUND: +env.SALT_ROUND,
 	NODE_ENV: env.NODE_ENV,
 	// Mongodb
-	MONGO_CONNECT_STRING: env.MONGO_URI,
+	MONGO_URI: env.MONGO_URI,
 	// Jsonwebtoken
 	JWT_EXPIRES: env.JWT_EXPIRES,
 	JWT_SECRET: env.JWT_SECRET,
