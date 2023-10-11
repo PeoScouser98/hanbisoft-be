@@ -5,20 +5,16 @@
 	"outputDirectory": "dist",
 	"builds": [
 		{
-			"src": "package.json",
+			"src": "./package.json",
 			"use": "@vercel/static-build",
-			"config": { "distDir": "dist" }
+			"config": { "distDir": "dist", "includeFiles": ["dist/app.js"] }
 		},
 		{
 			"src": "dist/app.js",
 			"use": "@vercel/node"
 		}
 	],
-	"functions": {
-		"dist/app.js": {
-			"runtime": "nodejs18.x"
-		}
-	},
+
 	"routes": [
 		{
 			"src": "/(.*)",
