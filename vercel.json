@@ -10,15 +10,14 @@
 			"config": { "distDir": "dist", "includeFiles": ["dist/app.js"] }
 		},
 		{
-			"src": "dist/app.js",
+			"src": "app.js",
 			"use": "@vercel/node"
 		}
 	],
-
 	"routes": [
 		{
 			"src": "/(.*)",
-			"dest": "dist/app.js"
+			"dest": "app.js"
 		}
 	]
 }
