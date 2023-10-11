@@ -10,7 +10,7 @@
 			"config": { "distDir": "dist", "includeFiles": ["dist/app.js"] }
 		},
 		{
-			"src": "./app.js",
+			"src": "app.js",
 			"use": "@vercel/node"
 		}
 	],
@@ -18,7 +18,7 @@
 		{ "handle": "filesystem" },
 		{
 			"src": "/(.*)",
-			"dest": "./app.js"
+			"dest": "app.js"
 		}
 	]
 }
