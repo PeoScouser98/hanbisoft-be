@@ -8,10 +8,8 @@
 	},
 	"scripts": {
 		"dev": "npx nodemon",
-		"preview": "SET NODE_ENV=production && node dist/app.js",
-		"start": "SET NODE_ENV=production && node app.js",
+		"start": "SET NODE_ENV=production && node src/app.js --exec babel-node -e js",
 		"build": "rm -rf dist && npx webpack --config webpack.config.js --mode production --env production",
-		"vercel-build": "rm -rf dist && npx webpack --config webpack.config.js --mode production --env production",
 		"vite:dev": "vite",
 		"vite:build": "vite build",
 		"test": "jest -i --colors --verbose --detectOpenHandles",

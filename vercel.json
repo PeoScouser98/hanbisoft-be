@@ -1,24 +1,15 @@
 {
 	"version": 2,
-	"buildCommand": "npm run build",
-	"installCommand": "npm install",
-	"outputDirectory": "dist",
 	"builds": [
 		{
-			"src": "./package.json",
-			"use": "@vercel/static-build",
-			"config": { "distDir": "dist", "includeFiles": ["dist/app.js"] }
-		},
-		{
-			"src": "app.js",
+			"src": "src/app.js",
 			"use": "@vercel/node"
 		}
 	],
 	"routes": [
-		{ "handle": "filesystem" },
 		{
 			"src": "/(.*)",
-			"dest": "app.js"
+			"dest": "src/app.js"
 		}
 	]
 }
