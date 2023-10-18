@@ -3,14 +3,14 @@ import __configs from '../configs/app.config';
 
 // Singleton pattern
 export default class Database {
-	/**@private */
+	/** @private */
 	#mongoURI = __configs.MONGO_URI;
 
 	constructor() {
 		this.#connect();
 	}
 
-	/**@private */
+	/** @private */
 	async #connect() {
 		{
 			try {
@@ -23,11 +23,12 @@ export default class Database {
 				console.info('[SUCCESS] Connected to database!');
 			} catch (error) {
 				console.log('[ERROR] ::: Failed to connect mongodb!');
+				// process.exit(1);
 			}
 		}
 	}
 
-	/**@static */
+	/** @static */
 	static getInstance() {
 		if (!Database.instance) Database.instance = new Database();
 		return Database.instance;

@@ -1,11 +1,11 @@
 import __configs from '../../configs/app.config';
 import HttpStatusCode from '../../constants/httpStatus';
-import { useAsync, HttpResponse } from '../../helpers/http';
+import { HttpRequest, HttpResponse } from '../../helpers/http';
 import GoogleDriveService from '../services/drive.service';
 import SiteSettingService from '../services/site_setting.service';
 
 export default class SiteSettingController {
-	static updateSiteSettings = useAsync(async (req, res) => {
+	static updateSiteSettings = HttpRequest(async (req, res) => {
 		console.log(req.files);
 		const [file] = req.files;
 		if (file) {

@@ -1,10 +1,10 @@
 'use strict';
 
-import { ActionEnum } from '../../constants/enum';
-import createHttpError from 'http-errors';
-import UserRoleModel from '../models/user_role.model';
-import mongoose from 'mongoose';
 import crypto from 'crypto';
+import createHttpError from 'http-errors';
+import mongoose from 'mongoose';
+import { ActionEnum } from '../../constants/enum';
+import UserRoleModel from '../models/user_role.model';
 
 /**
  * @typedef {import('../models/user_role.model').UserRole} UserRole

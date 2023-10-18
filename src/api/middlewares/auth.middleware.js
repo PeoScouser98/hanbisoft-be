@@ -4,7 +4,7 @@ import createHttpError from 'http-errors';
 import jwt from 'jsonwebtoken';
 import __configs from '../../configs/app.config';
 import { UserRoleEnum } from '../../constants/enum';
-import { useAsync } from '../../helpers/http';
+import { HttpRequest } from '../../helpers/http';
 
 /**
  * @typedef {import('express').Request} Request
@@ -18,7 +18,7 @@ export default class AuthMiddleware {
 	 * @param {Response} res
 	 * @param {NextFunction} next
 	 */
-	static checkAuthenticated = useAsync(async (req, res, next) => {
+	static checkAuthenticated = HttpRequest(async (req, res, next) => {
 		// const { authorization } = req.headers;
 		const accessToken = req.cookies.access_token;
 		if (!accessToken) throw createHttpError.Unauthorized('Access token must be provided');
@@ -32,7 +32,7 @@ export default class AuthMiddleware {
 	 * @param {Response} res
 	 * @param {NextFunction} next
 	 */
-	static checkIsAdmin = useAsync(async (req, res, next) => {
+	static checkIsAdmin = HttpRequest(async (req, res, next) => {
 		if (req.role === UserRoleEnum.MEMBER) throw createHttpError.Forbidden(`You don't have permission to access`);
 		return next();
 	});
@@ -41,7 +41,7 @@ export default class AuthMiddleware {
 	 * @param {Response} res
 	 * @param {NextFunction} next
 	 */
-	static checkIsSuperAdmin = useAsync(async (req, res, next) => {
+	static checkIsSuperAdmin = HttpRequest(async (req, res, next) => {
 		if (req.role !== UserRoleEnum.SUPER_ADMIN) throw createHttpError.Forbidden(`You don't have permission to access`);
 		return next();
 	});

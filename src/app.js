@@ -37,10 +37,11 @@ app.get('/', (_, res) =>
 		status: 200
 	})
 );
+
+// const server = http.createServer(app);
+
 app.listen(__configs.PORT, () => {
 	console.log(`[SUCCESS]: Server is listening on: http://localhost:${__configs.PORT}`);
 });
 
 Database.getInstance();
-
-export { app };

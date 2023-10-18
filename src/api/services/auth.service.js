@@ -1,10 +1,10 @@
 'use strict';
 /**@jsdocs */
-import createHttpError from 'http-errors';
-import UserModel from '../models/user.model';
 import bcrypt from 'bcrypt';
-import __configs from '../../configs/app.config';
 import crypto from 'crypto';
+import createHttpError from 'http-errors';
+import __configs from '../../configs/app.config';
+import UserModel from '../models/user.model';
 import sendMail from './nodemailer.service';
 
 export default class AuthService {

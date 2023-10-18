@@ -1,5 +1,5 @@
 import createHttpError from 'http-errors';
-import { useAsync, HttpResponse } from '../../helpers/http';
+import { HttpRequest, HttpResponse } from '../../helpers/http';
 import AuthService from '../services/auth.service';
 import jwt from 'jsonwebtoken';
 import UserModel from '../models/user.model';
@@ -12,7 +12,7 @@ export default class AuthController {
 	 * @endpoint /auth/signin
 	 * @method POST
 	 * */
-	static signin = useAsync(async (req, res) => {
+	static signin = HttpRequest(async (req, res) => {
 		const user = await AuthService.signin(req.body);
 		const accessToken = jwt.sign({ _id: user._id, email: user.email, role: user.role }, __configs.JWT_SECRET, {
 			expiresIn: __configs.JWT_EXPIRES
@@ -24,7 +24,7 @@ export default class AuthController {
 	 * @endpoint /auth/info
 	 * @method GET
 	 */
-	static getUserInfo = useAsync(async (req, res) => {
+	static getUserInfo = HttpRequest(async (req, res) => {
 		console.log(req.auth);
 		const currentUser = await AuthService.getUserInfo(req.auth);
 		const response = new HttpResponse(currentUser, null, HttpStatusCode.OK);
@@ -34,7 +34,7 @@ export default class AuthController {
 	 * @endpoint /auth/refresh-token
 	 * @method GET
 	 */
-	static refreshToken = useAsync(async (req, res) => {
+	static refreshToken = HttpRequest(async (req, res) => {
 		const id = req.params.authId;
 		if (!id) throw createHttpError.BadRequest('Failed to get refresh token due to missing auth ID');
 		const user = await UserModel.findById(id);
@@ -43,14 +43,13 @@ export default class AuthController {
 			expiresIn: __configs.JWT_EXPIRES
 		});
 		const response = new HttpResponse(refreshToken, 'Get refresh token successfully', HttpStatusCode.OK);
-
 		return res.status(HttpStatusCode.OK).cookie('access_token', refreshToken, cookieConfig).json(response);
 	});
 	/**
 	 * @endpoint /auth/update-info
 	 * @method PATCH
 	 */
-	static updateUser = useAsync(async (req, res) => {
+	static updateUser = HttpRequest(async (req, res) => {
 		const authId = req.auth;
 		console.log('authId :>> ', authId);
 		const updatedUser = await AuthService.updateUser(authId, req.body);
@@ -61,7 +60,7 @@ export default class AuthController {
 	 * @endpoint /auth/change-password
 	 * @method PATCH
 	 */
-	static changePassword = useAsync(async (req, res) => {
+	static changePassword = HttpRequest(async (req, res) => {
 		const authId = req.auth;
 		const result = await AuthService.changePassword(authId, req.body);
 		const response = new HttpResponse(result, 'Change password successfully', HttpStatusCode.CREATED);
@@ -71,7 +70,7 @@ export default class AuthController {
 	 * @endpoint /auth/recover-password
 	 * @method GET
 	 */
-	static recoverPassword = useAsync(async (req, res) => {
+	static recoverPassword = HttpRequest(async (req, res) => {
 		const email = req.body.email;
 		await AuthService.recoverPassword(email);
 		const response = new HttpResponse(null, 'Check your email to get new password!', HttpStatusCode.OK);

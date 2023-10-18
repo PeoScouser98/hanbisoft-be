@@ -6,7 +6,6 @@ const COLLECTION_NAME = 'tokens';
 /** @constant */
 const DOCUMENT_NAME = 'Tokens';
 
-/** @instance */
 const TokenSchema = new mongoose.Schema(
 	{
 		user: {

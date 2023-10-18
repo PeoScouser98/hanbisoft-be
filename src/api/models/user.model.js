@@ -2,7 +2,6 @@
 
 import bcrypt from 'bcrypt';
 import mongoose from 'mongoose';
-import autopopulatePlugin from 'mongoose-autopopulate';
 import __configs from '../../configs/app.config';
 import generatePictureByName from '../../helpers/generatePicture';
 
@@ -84,8 +83,8 @@ UserSchema.methods.encryptPassword = function (password) {
 	this.password = bcrypt.hashSync(password, __configs.SALT_ROUND);
 };
 
-UserSchema.plugin(autopopulatePlugin);
-// UserSchema.plugin(require('mongoose-autopopulate'));
+UserSchema.plugin(require('mongoose-autopopulate'));
+UserSchema.plugin(require('mongoose-paginate-v2'));
 
 const UserModel = mongoose.model(DOCUMENT_NAME, UserSchema);
 

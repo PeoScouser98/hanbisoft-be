@@ -1,3 +1,14 @@
 {
-	"git.ignoreLimitWarning": true
+	"git.ignoreLimitWarning": true,
+	"json.schemaDownload.enable": true,
+	"emmet.triggerExpansionOnTab": true,
+	"editor.tabSize": 3,
+	"prettier.useTabs": true,
+	"prettier.printWidth": 120,
+	"prettier.bracketSameLine": true,
+	"prettier.enable": true,
+	"editor.formatOnSave": true,
+	"editor.codeActionsOnSave": {
+		"source.organizeImports": true
+	}
 }

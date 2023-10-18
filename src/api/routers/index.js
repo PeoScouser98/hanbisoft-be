@@ -1,17 +1,11 @@
 import express from 'express';
 
-import authRouter from './auth.route';
-import equipmentRouter from './equipment.route';
-import siteSettingRouter from './site_setting.route';
-import userRouter from './user.route';
-import userRoleRouter from './user_roles.route';
-
 const rootRouter = express.Router();
 
-rootRouter.use(authRouter);
-rootRouter.use(equipmentRouter);
-rootRouter.use(siteSettingRouter);
-rootRouter.use(userRouter);
-rootRouter.use(userRoleRouter);
+rootRouter.use(require('./auth.route').default);
+rootRouter.use(require('./equipment.route').default);
+rootRouter.use(require('./site_setting.route').default);
+rootRouter.use(require('./user.route').default);
+rootRouter.use(require('./user_roles.route').default);
 
 export default rootRouter;

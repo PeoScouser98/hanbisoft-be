@@ -9,12 +9,14 @@ const DOCUMENT_NAME = 'CommonCodes';
 /** @type {CommonCodeDocument} */
 const CommonCodeSchema = new mongoose.Schema(
 	{
-		code: {
+		field: {
 			type: String,
 			required: true,
-			trim: true
+			trim: true,
+			unique: true,
+			lowercase: true
 		},
-		translation: {
+		expressions: {
 			en: {
 				type: String,
 				required: true,
@@ -26,7 +28,7 @@ const CommonCodeSchema = new mongoose.Schema(
 				trim: true
 			}
 		},
-		collection_name: {
+		collection: {
 			type: String,
 			required: true,
 			trim: true
@@ -39,7 +41,8 @@ const CommonCodeSchema = new mongoose.Schema(
 	},
 	{
 		collection: COLLECTION_NAME,
-		timestamps: true
+		timestamps: true,
+		versionKey: false
 	}
 );
 /** @type {CommonCodeModel} */
@@ -50,8 +53,8 @@ export default CommonCodeModel;
 /**
  * @typedef CommonCode
  * @property {string} code
- * @property {{kr: string, en: string}} translation
- * @property {string} collection_name
+ * @property {{kr: string, en: string}} expression
+ * @property {string} collection
  * @property {mongoose.Types.ObjectId} createdBy
  * -----------------------------------------------------------
  * @typedef {CommonCode & Document} CommonCodeDocument

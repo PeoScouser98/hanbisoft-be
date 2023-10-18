@@ -2,20 +2,10 @@
 	"name": "server",
 	"version": "1.0.0",
 	"description": "",
-	"main": "src/app.js",
-	"engines": {
-		"node": "18.x"
-	},
 	"scripts": {
-		"dev": "npx nodemon",
+		"dev": "npx nodemon --config nodemon.json",
 		"start": "SET NODE_ENV=production && node src/app.js --exec babel-node -e js",
 		"build": "rm -rf dist && npx webpack --config webpack.config.js --mode production --env production",
-		"vite:dev": "vite",
-		"vite:build": "vite build",
-		"test": "jest -i --colors --verbose --detectOpenHandles",
-		"test:watch": "jest -i --watchAll",
-		"coverage": "jest -i --coverage",
-		"coverage:coveralls": "jest -i --coverage --coverageReporters=text-lcov | coveralls",
 		"prettier:fix": "prettier --write \"src/**/(*.js)\"",
 		"eslint:fix": "eslint . --fix"
 	},
@@ -44,10 +34,9 @@
 		"swagger": "^0.7.5",
 		"swagger-jsdoc": "^6.2.8",
 		"swagger-ui-express": "^5.0.0",
-		"vite-node": "^0.34.6"
+		"xlsx": "^0.18.5"
 	},
 	"devDependencies": {
-		"@babel/cli": "^7.23.0",
 		"@babel/core": "^7.22.20",
 		"@babel/node": "^7.22.19",
 		"@babel/plugin-transform-runtime": "^7.22.15",
@@ -62,13 +51,10 @@
 		"jest": "^29.7.0",
 		"lint-staged": "^14.0.1",
 		"node-mocks-http": "^1.13.0",
-		"nodemon": "^3.0.1",
+		"nodemon": "3.0.1",
 		"prettier": "^3.0.3",
 		"supertest": "^6.3.3",
 		"terser-webpack-plugin": "^5.3.9",
-		"vite": "^4.4.11",
-		"vite-plugin-node": "^3.0.2",
-		"vite-plugin-restart": "^0.3.1",
 		"webpack": "^5.88.2",
 		"webpack-cli": "^5.1.4",
 		"webpack-node-externals": "^3.0.0"
